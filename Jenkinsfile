@@ -23,5 +23,12 @@ pipeline{
         archive "target/*.jar"
       }
     }
+    stage("Email Build Status"){
+      steps{
+        mail bcc: '', body: 'Sample Body', cc: '', from: '', replyTo: '', subject: 'Sample subject', to: 'megairon1201@gmail.com'
+      }
+    }
   }
 }
+
+
