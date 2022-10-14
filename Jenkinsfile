@@ -1,19 +1,19 @@
 pipeline{
   agent any
   stages{
-    stage("Cleaning Stage") {
+   stage("Parallel Execution"){
       steps{
-        bat "mvn clean"
-      }
-    }
-    stage("Testing Stage") {
-      steps{
-        bat "mvn test"
-      }
-    }
-    stage("Packing Stage") {
-      steps{
-        bat "mvn package"
+        parallel(
+          a:{
+            bat "mvn clean"
+          },
+          b:{
+            bat "mvn test"
+          },
+          c:{
+            bat "mvn package"
+          }
+        )
       }
     }
     stage("Consolidate Results") {
@@ -21,11 +21,6 @@ pipeline{
         input("Do you want to capture results")
         junit"**/target/surefire-reports/TEST-*.xml"
         archive "target/*.jar"
-      }
-    }
-    stage("Email Build Status"){
-      steps{
-        mail bcc: '', body: 'Sample Body', cc: '', from: '', replyTo: '', subject: 'Sample subject', to: 'megairon1201@gmail.com'
       }
     }
   }
